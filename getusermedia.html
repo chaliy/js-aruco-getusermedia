@@ -15,12 +15,18 @@
     var videoSelect;
 
     function successCallback(stream){
-      if (window.URL) {
-        video.src = window.URL.createObjectURL(stream) || stream;
+      if (window.webkitURL) {
+        video.src = window.webkitURL.createObjectURL(stream);
+      } else if (video.mozSrcObject !== undefined) {
+        video.mozSrcObject = stream;
       } else {
-        video.src = stream || stream; // Opera.
+        video.src = stream;
       }
-      video.play();
+
+
+      // window.stream = stream; // make stream available to console
+      // videoElement.src = window.URL.createObjectURL(stream);
+      // videoElement.play();
     }
 
     function errorCallback(error){
@@ -139,7 +145,7 @@
     function chanceSource(){
       if (!!window.stream) {
         video.src = null;
-        window.stream.stop();
+        //window.stream.stop();
       }
       var audioSource = audioSelect.value;
       var videoSource = videoSelect.value;

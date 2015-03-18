@@ -14,6 +14,25 @@
     var audioSelect;
     var videoSelect;
 
+    function successCallback(stream){
+      window.stream = stream; // make stream available to console
+      if (window.URL) {
+        video.src = window.URL.createObjectURL(stream);
+      } else if (window.webkitURL) {
+        video.src = window.webkitURL.createObjectURL(stream);
+      } else if (video.mozSrcObject !== undefined) {
+        video.mozSrcObject = stream;
+      } else {
+        video.src = stream;
+      }
+      //video.play();
+    }
+
+
+    function errorCallback(error){
+      alert('navigator.getUserMedia error: ', error);
+    }
+
     function onLoad(){
       video = document.getElementById("video");
       canvas = document.getElementById("canvas");
@@ -47,18 +66,7 @@
           }
         });
 
-        function successCallback(stream){
-          if (window.webkitURL) {
-            video.src = window.webkitURL.createObjectURL(stream);
-          } else if (video.mozSrcObject !== undefined) {
-            video.mozSrcObject = stream;
-          } else {
-            video.src = stream;
-          }
-        }
 
-        function errorCallback(error){
-        }
 
         navigator.getUserMedia({video: true}, successCallback, errorCallback);
 
@@ -149,16 +157,6 @@
           optional: [{sourceId: videoSource}]
         }
       };
-
-      function successCallback(stream) {
-        window.stream = stream; // make stream available to console
-        video.src = window.URL.createObjectURL(stream);
-        video.play();
-      }
-
-      function errorCallback(error){
-        alert('navigator.getUserMedia error: ', error);
-      }
 
       navigator.getUserMedia(constraints, successCallback, errorCallback);
     }

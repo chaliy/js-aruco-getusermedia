@@ -136,7 +136,7 @@
 
     function chanceSource(){
       if (!!window.stream) {
-        videoElement.src = null;
+        video.src = null;
         window.stream.stop();
       }
       var audioSource = audioSelect.value;
@@ -149,6 +149,17 @@
           optional: [{sourceId: videoSource}]
         }
       };
+
+      function successCallback(stream) {
+        window.stream = stream; // make stream available to console
+        video.src = window.URL.createObjectURL(stream);
+        video.play();
+      }
+
+      function errorCallback(error){
+        alert('navigator.getUserMedia error: ', error);
+      }
+
       navigator.getUserMedia(constraints, successCallback, errorCallback);
     }
 

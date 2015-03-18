@@ -2,6 +2,7 @@
 
 <head>
   <title>Augmented Reality Marker Detector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script type="text/javascript" src="libs/polyfill.js"></script>
 
@@ -11,26 +12,15 @@
   <script>
     var video, canvas, context, imageData, detector;
 
-    var audioSelect;
     var videoSelect;
 
     function successCallback(stream){
-      // if (window.webkitURL) {
-      //   video.src = window.webkitURL.createObjectURL(stream);
-      // } else if (video.mozSrcObject !== undefined) {
-      //   video.mozSrcObject = stream;
-      // } else {
-      //   video.src = stream;
-      // }
-
-
       window.stream = stream; // make stream available to console
       video.src = window.URL.createObjectURL(stream);
       video.play();
     }
 
     function errorCallback(error){
-      //alert('navigator.getUserMedia error: ', error);
     }
 
     function onLoad(){
@@ -38,9 +28,7 @@
       canvas = document.getElementById("canvas");
       context = canvas.getContext("2d");
 
-      audioSelect = document.querySelector('select#audioSource');
       videoSelect = document.querySelector('select#videoSource');
-      audioSelect.onchange = chanceSource;
       videoSelect.onchange = chanceSource;
 
       canvas.width = parseInt(canvas.style.width);
@@ -54,10 +42,7 @@
             var sourceInfo = sourceInfos[i];
             var option = document.createElement('option');
             option.value = sourceInfo.id;
-            if (sourceInfo.kind === 'audio') {
-              option.text = sourceInfo.label || 'microphone ' + (audioSelect.length + 1);
-              audioSelect.appendChild(option);
-            } else if (sourceInfo.kind === 'video') {
+            if (sourceInfo.kind === 'video') {
               option.text = sourceInfo.label || 'camera ' + (videoSelect.length + 1);
               videoSelect.appendChild(option);
             } else {
@@ -65,10 +50,6 @@
             }
           }
         });
-
-
-
-        // navigator.getUserMedia({video: true}, successCallback, errorCallback);
 
         chanceSource();
 
@@ -149,12 +130,9 @@
         video.src = null;
         window.stream.stop();
       }
-      var audioSource = audioSelect.value;
+
       var videoSource = videoSelect.value;
       var constraints = {
-        audio: {
-          optional: [{sourceId: audioSource}]
-        },
         video: {
           optional: [{sourceId: videoSource}]
         }
@@ -169,10 +147,6 @@
 </head>
 
 <body style="font-family: monospace;">
-
-  <div class="select">
-    <label for="audioSource">Audio source: </label><select id="audioSource"></select>
-  </div>
 
   <div class="select">
     <label for="videoSource">Video source: </label><select id="videoSource"></select>

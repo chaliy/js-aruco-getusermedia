@@ -15,18 +15,18 @@
     var videoSelect;
 
     function successCallback(stream){
-      if (window.webkitURL) {
-        video.src = window.webkitURL.createObjectURL(stream);
-      } else if (video.mozSrcObject !== undefined) {
-        video.mozSrcObject = stream;
-      } else {
-        video.src = stream;
-      }
+      // if (window.webkitURL) {
+      //   video.src = window.webkitURL.createObjectURL(stream);
+      // } else if (video.mozSrcObject !== undefined) {
+      //   video.mozSrcObject = stream;
+      // } else {
+      //   video.src = stream;
+      // }
 
 
-      // window.stream = stream; // make stream available to console
-      // videoElement.src = window.URL.createObjectURL(stream);
-      // videoElement.play();
+      window.stream = stream; // make stream available to console
+      video.src = window.URL.createObjectURL(stream);
+      video.play();
     }
 
     function errorCallback(error){
@@ -68,7 +68,9 @@
 
 
 
-        navigator.getUserMedia({video: true}, successCallback, errorCallback);
+        // navigator.getUserMedia({video: true}, successCallback, errorCallback);
+
+        chanceSource();
 
         detector = new AR.Detector();
 
@@ -145,7 +147,7 @@
     function chanceSource(){
       if (!!window.stream) {
         video.src = null;
-        //window.stream.stop();
+        window.stream.stop();
       }
       var audioSource = audioSelect.value;
       var videoSource = videoSelect.value;
